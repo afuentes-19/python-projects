@@ -10,7 +10,7 @@ weather = input("Enter a word that describes the weather:")
 time_of_year = input("Enter the time of year:")
 animal = input("Enter the name of an animal:")
 
-print ("On a " + weather + " " + time_of_year + "day, " +
+print ("On a " + weather + " " + time_of_year + " day, " +
     " " + name1 + " was walking around the " + place + " and then suddenly saw a " +
-    animal + " " + verb1 + "towards " + noun1 + " in the middle of the " + place2 + "leading " + name1 + " to suddenly " +
-    "crave for a " + food)
+    animal + " " + verb1 + " in the middle of the " + place2 + ". It was a " + adjective1 + " " 
+    + noun1 + " that made " + name1 + " suddenly " + "crave for " + food)
