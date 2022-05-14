@@ -65,8 +65,8 @@ if (time_mode and time_left < 0):
 randomNumMonsters = random.randint(10, 20)
 print(f"   Now, GET READY TO FIGHT! There are {randomNumMonsters} island MONSTERS ready to fight you.\n" +
         "   Each turn you can choose to 'attack', 'heal', or 'run'.\n" +
-        "   Entering 'attack' will defeat at least 1 to at most 6 monsters. You lose 2 health each time you attack. If health is less than 5, you will only kill 1 monster.\n" +
-        "   Entering 'heal' will heal yourself 3 health if you have less than 5 health left or you will get only 1 health if 5 health or more. \n (Healing takes 5 precious seconds off the clock if you are in timed mode.)\n" +
+        "   Entering 'attack' will defeat at least 1 to at most 6 monsters. You lose 2 health each time you attack and if your health is less than 5, you will only kill 1 monster.\n" +
+        "   Entering 'heal' will heal yourself with 3 lives and if you have less than 5 lives left or you will only get 1 health if you have 5 lives or more. \n (Healing takes 5 precious seconds off the clock if you are in timed mode.)\n" +
         "   Entering 'run' will mean you are too afraid or rushed (using time mode) to fight and have to rely on your speed to escape whatever monsters remain!\n" +
         "   Also, you only have 10 TURNS before it gets too dark on the island and you tire of dehydration. So choose wisely.")
 
@@ -94,7 +94,10 @@ while randomNumMonsters > 0:
     # attack
     if user_action == "attack":
         randomAttack = random.randint(1,6)
-        randomNumMonsters -= randomAttack; 
+        if user_health >= 5:
+            randomNumMonsters -= randomAttack
+        else:
+            randomNumMonsters -= 1
         user_health -= 2; 
         if user_health < 1:
             print("You ran out of lives! Game over.")
@@ -126,6 +129,7 @@ while randomNumMonsters > 0:
     # let user know of their health status, time status (if time mode), and monsters left!
     print(f"HEALTH CHECK: You have {user_health} health left")
     print(f"MONSTERS LEFT: You have {randomNumMonsters} monsters left")
+    print(f"({turns} turns left)")
     if time_mode: 
         time_left = time_to_win - (time.time() - start_time)
         print(f"MONSTERS LEFT: You have {time_left} seconds left!")
