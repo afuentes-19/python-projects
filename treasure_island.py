@@ -27,7 +27,6 @@ game_over = False
 time_to_win = 60; 
 time_left = 60; 
 start_time = 0; 
-still_time = time_left > 0; 
 user_health = 10
 user_turns = 10 
 
@@ -75,7 +74,7 @@ while randomNumMonsters > 0:
     # game over checks
     if time_mode:
         time_left = time_to_win - (time.time() - start_time)
-        if not still_time:
+        if time_left<=0:
             print("You ran out of time! Game over")
             sys.exit()
     if turns < 1:
@@ -132,12 +131,12 @@ while randomNumMonsters > 0:
     print(f"({turns} turns left)")
     if time_mode: 
         time_left = time_to_win - (time.time() - start_time)
-        print(f"MONSTERS LEFT: You have {time_left} seconds left!")
+        print(f"TIME LEFT: You have {time_left} seconds left!")
 
 #time check
 if time_mode:
     time_left = time_to_win - (time.time() - start_time)
-    if not still_time:
+    if time_left <= 0:
         print("You ran out of time! Game over")
         sys.exit()
 
@@ -185,7 +184,7 @@ else:
 #time check
 if time_mode:
     time_left = time_to_win - (time.time() - start_time)
-    if not still_time:
+    if time_left <= 0:
         print("You ran out of time! Game over")
         sys.exit()
 
@@ -222,7 +221,7 @@ if randomTriviaTopic == "geography":
 #time check
 if time_mode:
     time_left = time_to_win - (time.time() - start_time)
-    if not still_time:
+    if time_left<=0:
         print("You ran out of time! Game over")
         sys.exit()
     print(f"TIME CHECK: You have {time_left} seconds left!")
@@ -238,7 +237,7 @@ else:
 #time check
 if time_mode:
     time_left = time_to_win - (time.time() - start_time)
-    if not still_time:
+    if time_left<=0:
         print("You ran out of time! Game over")
         sys.exit()
     print(f"TIME CHECK: You have {time_left} seconds left!")
@@ -255,7 +254,7 @@ user_which_hand = input("You approach the Guard, and he says he has the key in o
 if user_which_hand == randomHand:
     if time_mode: 
         time_left = time_to_win - (time.time() - start_time)
-        if not still_time:
+        if time_left<=0:
             print("You ran out of time! Game over")
             sys.exit() 
         else: 
