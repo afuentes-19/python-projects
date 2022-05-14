@@ -23,7 +23,8 @@ ____/______/______/______/______/_____"=.o|o_.--""___/______/______/______/____
 /______/______/______/______/______/______/______/______/______/______/[TomekK]
 *******************************************************************************''')
 time_mode = False
-game_over = False 
+game_over = False
+hard_mode = False 
 time_to_win = 60; 
 time_left = 60; 
 start_time = 0; 
@@ -31,12 +32,20 @@ user_health = 10
 user_turns = 10 
 
 # Intro 
-print("Welcome to Treasure Island! Be careful to make the right choices to survive!")
+print("Welcome to Treasure Island! You are in a beautiful island and ALAS! You saw on the brochure that there was TREASURE HERE!\n" +
+    "You're on a journey to find the treasure but you will have to use your wits to survive on this dangerously fun journey!")
+hard_mode = input("Enter 'H' for hard mode or enter to continue with normal mode\n")
 time_mode_response = input("Want to spice things up with timed mode? Enter 'Y' for Yes or just press enter to continue without timed mode\n")
 if time_mode_response == 'Y': 
     time_mode = True
     start_time = time.time()
-    print("Timer started, you have 1 minute to find the treasure!")
+    if hard_mode == 'H':
+        hard_mode = True
+        time_left = 45
+        time_to_win = 45
+        print("Timer started, you have 45 seconds to find the treasure!")
+    else:  
+        print("Timer started, you have 1 minute to find the treasure!")
 direction_options = ["left", "right", "forward", "diagonal", "moonwalk"]
 wrong_direction = random.choice(direction_options)
 
@@ -61,19 +70,24 @@ if (time_mode and time_left < 0):
     sys.exit()
 
 # Second Challenge: Fight monsters
-randomNumMonsters = random.randint(12, 20)
+if (hard_mode): 
+    randomNumMonsters = random.randint(22, 30)
+else: 
+    randomNumMonsters = random.randint(12, 20)
+
 print(f"   Now, GET READY TO FIGHT! There are {randomNumMonsters} island MONSTERS ready to fight you.\n" +
         "   Each turn you can choose to 'attack', 'heal', or 'run'.\n" +
-        "   Entering 'attack' will defeat at least 1 to at most 6 monsters. You lose 2 health each time you attack and if your health is less than 5, you will only kill 1 monster.\n" +
-        "   Entering 'heal' will heal yourself with 3 lives and if you have less than 5 lives left or you will only get 1 health if you have 5 lives or more. \n (Healing takes 5 precious seconds off the clock if you are in timed mode.)\n" +
+        "   Entering 'attack' will defeat at least 1 to at most 6 monsters depending on your health. You lose 2 health each time you attack.\n" +
+        "   Entering 'heal' will heal yourself with 3 lives and if you have less than 5 lives left or you will get or 1-2 health if you have 5 lives or more. \n (Healing takes 3 seconds if you are in timed mode!)\n" +
         "   Entering 'run' will mean you will rather flight than fight and have to rely on your health, speed, and luck to escape whatever monsters remain!\n" +
         "   Also, you only have 10 TURNS before it gets too dark on the island and you tire of dehydration. So choose wisely.")
 
 turns = 10
+heal_count = 0
 while randomNumMonsters > 0:
     # game over checks
     if time_mode:
-        time_left = time_to_win - (time.time() - start_time)
+        time_left = time_to_win - (time.time() - start_time) - (heal_count*3)
         if time_left<=0:
             print("You ran out of time! Game over")
             sys.exit()
@@ -92,23 +106,30 @@ while randomNumMonsters > 0:
 
     # attack
     if user_action == "attack":
-        randomAttack = random.randint(1,6)
-        if user_health >= 5:
+        if user_health >= 8:
+            randomAttack = random.randint(4, 6)
             randomNumMonsters -= randomAttack
-        else:
+        elif user_health >= 5 and user_health <= 7:
+            randomAttack = random.randint(2, 5) 
+            randomNumMonsters -= randomAttack  
+        elif user_health == 4:
+            randomAttack = random.randint(1,3) 
+            randomNumMonsters -= randomAttack  
+        else: 
             randomNumMonsters -= 1
-        user_health -= 2; 
+        user_health -= 2
         if user_health < 1:
             print("You ran out of lives! Game over.")
             sys.exit()
     # heal 
     elif user_action == "heal":
         if user_health >= 5:
-            user_health += 1
+            randomHealth = random.randint(1,2)
+            user_health += randomHealth
         else: 
             user_health += 3
         if time_mode:
-            time_left -= 5
+            heal_count += 1
 
     # run
     elif user_action == "run": 
@@ -117,22 +138,22 @@ while randomNumMonsters > 0:
             sys.exit()
         elif randomNumMonsters >=2 and randomNumMonsters <= 5:
             randomRunLuck = random.randint(1,3) 
-            print("random luck number " + str(randomRunLuck))
+            print("speed number " + str(randomRunLuck))
             print("With your chances, you had a 33 percent chance to run away!")
         elif randomNumMonsters == 1 and user_health < 6:
             randomRunLuck = random.randint(1,2) + 1
-            print("random luck number " + str(randomRunLuck))
+            print("speed number " + str(randomRunLuck))
             print("With your chances, you had a 50 percent chance to run away!")
         elif randomNumMonsters == 1 and user_health >= 6:
             randomRunLuck = random.randint(1,2) + 1
-            print("random luck number " + str(randomRunLuck))
+            print("speed number " + str(randomRunLuck))
             if randomRunLuck != 3:
                 randomRunLuck = random.randint(1,2) + 1
-                print("random luck number " + str(randomRunLuck))
+                print("speed number " + str(randomRunLuck))
                 print("With your chances, you had a 75 percent chance to run away!")
         elif user_health >= 12 and randomNumMonsters <8:
             randomRunLuck = random.randint(1,5)
-            print("random luck number " + randomRunLuck)
+            print("speed number " + randomRunLuck)
             print("With your chances, you had a 20 percent chance to run away!")
         else: 
             randomRunLuck = random.randint(1,25)
@@ -153,14 +174,15 @@ while randomNumMonsters > 0:
     print(f"MONSTERS LEFT: You have {randomNumMonsters} monsters left")
     print(f"({turns} turns left)")
     if time_mode: 
-        time_left = time_to_win - (time.time() - start_time)
+        time_left = time_to_win - (time.time() - start_time) - (heal_count*5)
         print(f"TIME LEFT: You have {time_left} seconds left!")
 
 #time check
 if time_mode:
-    time_left = time_to_win - (time.time() - start_time)
+    time_left = time_to_win - (time.time() - start_time) - (heal_count*3)
     if time_left <= 0:
         print("You ran out of time! Game over")
+        print("Time: " + str(time_left))
         sys.exit()
 
 # Third Challenge 
@@ -170,6 +192,8 @@ randomNum1 = random.randint(1,10)
 randomNum2 = random.randint(1,10)
 randomQuestion = random.randint(1,4)
 math_answer = randomNum1 * randomNum2
+if (hard_mode):
+    math_answer = (randomNum1 * randomNum2) - (randomNum1 + randomNum2)
 triviaTypes = ["science", "history", "geography"]
 scienceTrivia = [
     "Enter the name of the essential gas so important that allows us to breathe?",
@@ -194,7 +218,10 @@ geographyTrivia = [
 geographyTriviaAnswers = ["china", "nile river", "antarctica", "south america"]
 
 print("PART 1: THE PATTY")
-user_math_answer = input(f"What is {randomNum1} times {randomNum2}?\n")
+if hard_mode:
+    user_math_answer = input(f"What is ({randomNum1} x {randomNum2}) - ({randomNum1} + {randomNum2})?\n")
+else: 
+    user_math_answer = input(f"What is {randomNum1} times {randomNum2}?\n")
 user_math_answer = int(user_math_answer)
 if user_math_answer != math_answer:
     print("wrong answer! brush up on your math, game over.")
@@ -206,9 +233,10 @@ else:
         print(f"TIME CHECK: You have {time_left} seconds left!")
 #time check
 if time_mode:
-    time_left = time_to_win - (time.time() - start_time)
+    time_left = time_to_win - (time.time() - start_time) - (heal_count*3)
     if time_left <= 0:
         print("You ran out of time! Game over")
+        print("Time: " + str(time_left))
         sys.exit()
 
 print("PART 2: THE TOPPINGS! (Lettuce, Tomato, Onions, Mayo")
@@ -243,25 +271,31 @@ if randomTriviaTopic == "geography":
 
 #time check
 if time_mode:
-    time_left = time_to_win - (time.time() - start_time)
+    time_left = time_to_win - (time.time() - start_time) - (heal_count*3)
     if time_left<=0:
         print("You ran out of time! Game over")
+        print("Time: " + str(time_left))
         sys.exit()
     print(f"TIME CHECK: You have {time_left} seconds left!")
 
 print("PART 3: THE ASSEMBLY!")
-answer = "This burger is for the people of Treasure Island"
-user_statement = input("Enter the following phrase:\n" + answer + "\n")
+if hard_mode:
+    answer = "This deliciously salivating burger is for the amicable people of Treasure Island!"
+else:
+    answer = "This burger is for the people of Treasure Island!"
+user_statement = input("Enter the following phrase precisely:\n" + answer + "\n")
 if user_statement == answer:
     print("The burgers are ready and are being served to the people of Treasure Island!")
 else: 
     print("You dropped the burgers on the ground! Game over")
+    sys.exit()
 
 #time check
 if time_mode:
-    time_left = time_to_win - (time.time() - start_time)
+    time_left = time_to_win - (time.time() - start_time) - (heal_count*3)
     if time_left<=0:
         print("You ran out of time! Game over")
+        print(f"Time: {time_left}")
         sys.exit()
     print(f"TIME CHECK: You have {time_left} seconds left!")
 
@@ -272,13 +306,19 @@ randomHand = random.choice(["right", "left"])
 # The Queen gives the key to the treasure!
 print(f"The Queen of Treasure Island thinks you have done a splendid job and tells you to approach the guard for the treasure.\n" +
     f"One more thing: she says to pick the {randomHand} hand from the Guard when he asks you")
+if hard_mode: 
+    print(f"The Queen of Treasure Island has also noted to not forget to mind your manners and say please after your response. No commas needed")
+    randomHand += " please"
+
 user_which_hand = input("You approach the Guard, and he says he has the key in one of his hands. He is asking which hand do you choose? Enter 'right' or 'left'\n")
+user_which_hand.lower()
 
 if user_which_hand == randomHand:
     if time_mode: 
-        time_left = time_to_win - (time.time() - start_time)
+        time_left = time_to_win - (time.time() - start_time) - (heal_count*3)
         if time_left<=0:
             print("You ran out of time! Game over")
+            print(f"Time: {time_left}")
             sys.exit() 
         else: 
             print("Congrats! You win the treasure and the game! Thanks for playing!")
