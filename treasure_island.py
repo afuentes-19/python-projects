@@ -32,11 +32,11 @@ user_health = 10
 user_turns = 10 
 
 # Intro 
-print("Welcome to Treasure Island! You are in a beautiful island and ALAS! You saw on the brochure that there was TREASURE HERE!\n" +
+print("Welcome to Treasure Island! You are in a beautiful island and ALAS! You see on the brochure that there is TREASURE somewhere on this island!\n" +
     "You're on a journey to find the treasure but you will have to use your wits to survive on this dangerously fun journey!")
 hard_mode = input("Enter 'H' for hard mode or enter to continue with normal mode\n")
 time_mode_response = input("Want to spice things up with timed mode? Enter 'Y' for Yes or just press enter to continue without timed mode\n")
-if time_mode_response == 'Y': 
+if time_mode_response == 'Y':
     time_mode = True
     start_time = time.time()
     if hard_mode == 'H':
@@ -174,7 +174,7 @@ while randomNumMonsters > 0:
     print(f"MONSTERS LEFT: You have {randomNumMonsters} monsters left")
     print(f"({turns} turns left)")
     if time_mode: 
-        time_left = time_to_win - (time.time() - start_time) - (heal_count*5)
+        time_left = time_to_win - (time.time() - start_time) - (heal_count*3)
         print(f"TIME LEFT: You have {time_left} seconds left!")
 
 #time check
@@ -187,7 +187,7 @@ if time_mode:
 
 # Third Challenge 
 print("The island is full of treasure, and the Queen of Treasure Island has the key to the treasure if you are able to give the people what they want... BURGERS!\n" + 
-    "You will prepare the burgers by answering a series of math questions and trivia for each step!")
+    "You will prepare the burgers by answering a series of math and trivia questions for each step!")
 randomNum1 = random.randint(1,10)
 randomNum2 = random.randint(1,10)
 randomQuestion = random.randint(1,4)
