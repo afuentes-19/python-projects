@@ -61,12 +61,12 @@ if (time_mode and time_left < 0):
     sys.exit()
 
 # Second Challenge: Fight monsters
-randomNumMonsters = random.randint(10, 20)
+randomNumMonsters = random.randint(12, 20)
 print(f"   Now, GET READY TO FIGHT! There are {randomNumMonsters} island MONSTERS ready to fight you.\n" +
         "   Each turn you can choose to 'attack', 'heal', or 'run'.\n" +
         "   Entering 'attack' will defeat at least 1 to at most 6 monsters. You lose 2 health each time you attack and if your health is less than 5, you will only kill 1 monster.\n" +
         "   Entering 'heal' will heal yourself with 3 lives and if you have less than 5 lives left or you will only get 1 health if you have 5 lives or more. \n (Healing takes 5 precious seconds off the clock if you are in timed mode.)\n" +
-        "   Entering 'run' will mean you are too afraid or rushed (using time mode) to fight and have to rely on your speed to escape whatever monsters remain!\n" +
+        "   Entering 'run' will mean you will rather flight than fight and have to rely on your health, speed, and luck to escape whatever monsters remain!\n" +
         "   Also, you only have 10 TURNS before it gets too dark on the island and you tire of dehydration. So choose wisely.")
 
 turns = 10
@@ -115,8 +115,31 @@ while randomNumMonsters > 0:
         if randomNumMonsters >= 5 and user_health <= 5:
             print("You were too low in health and there were too many monsters!\n They caught up to you and they want you to feed them burgers forever. Game over!")
             sys.exit()
-        randomRunLuck = random.randint(1,3) 
-        if randomRunLuck == 3 and randomNumMonsters < 5:
+        elif randomNumMonsters >=2 and randomNumMonsters <= 5:
+            randomRunLuck = random.randint(1,3) 
+            print("random luck number " + str(randomRunLuck))
+            print("With your chances, you had a 33 percent chance to run away!")
+        elif randomNumMonsters == 1 and user_health < 6:
+            randomRunLuck = random.randint(1,2) + 1
+            print("random luck number " + str(randomRunLuck))
+            print("With your chances, you had a 50 percent chance to run away!")
+        elif randomNumMonsters == 1 and user_health >= 6:
+            randomRunLuck = random.randint(1,2) + 1
+            print("random luck number " + str(randomRunLuck))
+            if randomRunLuck != 3:
+                randomRunLuck = random.randint(1,2) + 1
+                print("random luck number " + str(randomRunLuck))
+                print("With your chances, you had a 75 percent chance to run away!")
+        elif user_health >= 12 and randomNumMonsters <8:
+            randomRunLuck = random.randint(1,5)
+            print("random luck number " + randomRunLuck)
+            print("With your chances, you had a 20 percent chance to run away!")
+        else: 
+            randomRunLuck = random.randint(1,25)
+            print("With your chances, you had a 4 percent chance to run away!")
+            print(randomRunLuck)
+ 
+        if randomRunLuck == 3:
             print("Nice job, you were able to outrun the monsters!")
             randomNumMonsters = 0; 
         else: 
