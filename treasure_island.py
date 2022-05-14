@@ -246,7 +246,7 @@ randomHand = random.choice(["right", "left"])
 # The Queen gives the key to the treasure!
 print(f"The Queen of Treasure Island thinks you have done a splendid job and tells you to approach the guard for the treasure.\n" +
     f"One more thing: she says to pick the {randomHand} hand from the Guard when he asks you")
-user_which_hand = input("You approach the Guard, and he says he has the key in one of his hands. He is asking which hand do you choose?")
+user_which_hand = input("You approach the Guard, and he says he has the key in one of his hands. He is asking which hand do you choose?\n")
 
 if user_which_hand == randomHand:
     if time_mode: 
