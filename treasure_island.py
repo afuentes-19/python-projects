@@ -33,7 +33,7 @@ user_turns = 10
 
 # Intro 
 print("Welcome to Treasure Island! Be careful to make the right choices to survive!")
-time_mode_response = input("Want to spice things up with timed mode? Enter 'Y' for Yes or just press enter\n")
+time_mode_response = input("Want to spice things up with timed mode? Enter 'Y' for Yes or just press enter to continue without timed mode\n")
 if time_mode_response == 'Y': 
     time_mode = True
     start_time = time.time()
