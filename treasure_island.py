@@ -73,12 +73,12 @@ if (time_mode and time_left < 0):
 if (hard_mode): 
     randomNumMonsters = random.randint(22, 30)
 else: 
-    randomNumMonsters = random.randint(12, 20)
+    randomNumMonsters = random.randint(16, 22)
 
 print(f"   Now, GET READY TO FIGHT! There are {randomNumMonsters} island MONSTERS ready to fight you.\n" +
         "   Each turn you can choose to 'attack', 'heal', or 'run'.\n" +
         "   Entering 'attack' will defeat at least 1 to at most 6 monsters depending on your health. You lose 2 health each time you attack.\n" +
-        "   Entering 'heal' will heal yourself with 3 lives and if you have less than 5 lives left or you will get or 1-2 health if you have 5 lives or more. \n (Healing takes 3 seconds if you are in timed mode!)\n" +
+        "   Entering 'heal' will allow the doctor to heal you with 1 or 2 lives. If you have less than 5 lives, you will get 3 lives. \n (Healing takes 3 seconds if you are in timed mode!)\n" +
         "   Entering 'run' will mean you will rather flight than fight and have to rely on your health, speed, and luck to escape whatever monsters remain!\n" +
         "   Also, you only have 10 TURNS before it gets too dark on the island and you tire of dehydration. So choose wisely.")
 
@@ -158,7 +158,7 @@ while randomNumMonsters > 0:
         else: 
             randomRunLuck = random.randint(1,25)
             print("With your chances, you had a 4 percent chance to run away!")
-            print(randomRunLuck)
+            #print(randomRunLuck)
  
         if randomRunLuck == 3:
             print("Nice job, you were able to outrun the monsters!")
@@ -229,7 +229,7 @@ if user_math_answer != math_answer:
 else: 
     print("Great job, math whiz!")
     if time_mode: 
-        time_left = time_to_win - (time.time() - start_time)
+        time_left = time_to_win - (time.time() - start_time) - (heal_count*3)
         print(f"TIME CHECK: You have {time_left} seconds left!")
 #time check
 if time_mode:
