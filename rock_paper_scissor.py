@@ -29,6 +29,7 @@ scissors = """
       (____)
 ---.__(___)
 """
+game_images = [rock, paper, scissors]
 acceptable_input = [0, 1, 2]
 user_choice = input("What do you choose? Type 0 for Rock, 1 for Paper, or 2 for Scissors.\n")
 user_choice = int(user_choice)
@@ -39,20 +40,10 @@ while user_choice not in acceptable_input:
 computer_choice = random.choice(acceptable_input)
 
 print("Your choice\n")
-if (user_choice == 0):
-    print(rock + "\n")
-elif (user_choice == 1):
-    print(paper + "\n")
-else:
-    print(scissors + "\n")
+print(game_images[user_choice] + "\n")
 
 print("CPU Choice:\n")
-if (computer_choice == 0):
-    print(rock + "\n")
-elif (computer_choice == 1):
-    print(paper + "\n")
-else:
-    print(scissors + "\n")
+print(game_images[computer_choice] + "\n")
 
 result= ""
 if user_choice == computer_choice:
