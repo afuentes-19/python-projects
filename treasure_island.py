@@ -80,7 +80,7 @@ print(f"   Now, GET READY TO FIGHT! There are {randomNumMonsters} island MONSTER
         "   Entering 'attack' will defeat at least 1 to at most 6 monsters depending on your health. You lose 2 health each time you attack.\n" +
         "   Entering 'heal' will allow the doctor to heal you with 1 or 2 lives. If you have less than 5 lives, you will get 3 lives. \n (Healing takes 3 seconds if you are in timed mode!)\n" +
         "   Entering 'run' will mean you will rather flight than fight and have to rely on your health, speed, and luck to escape whatever monsters remain!\n" +
-        "   Also, you only have 10 TURNS before it gets too dark on the island and you tire of dehydration. So choose wisely.")
+        "   You start with 10 lives and also, you only have 10 TURNS before it gets too dark on the island and you tire of dehydration. So choose wisely.")
 
 turns = 10
 heal_count = 0
@@ -280,14 +280,22 @@ if time_mode:
 
 print("PART 3: THE ASSEMBLY!")
 if hard_mode:
-    answer = "This deliciously salivating burger is for the amicable people of Treasure Island!"
+    randomHardAdjectives1 = ["delectable", "exquisite", "luscious", "titilating", "nectarous", "scrumptious", "ambrosial"]
+    randomHardAdjectives2 = ["eleemosynary", "propitious", "amicable", "amiable"]
+    randomHardAdjective1 = random.choice(randomHardAdjectives1)
+    randomHardAdjective2 = random.choice(randomHardAdjectives2)
+    answer = f"These deliciously {randomHardAdjective1} burgers are for the {randomHardAdjective2} people of Treasure Island!"
 else:
-    answer = "This burger is for the people of Treasure Island!"
+    randomAdjectives1 = ["appetizing", "enjoyable", "delicious", "divine"]
+    randomAdjectives2 = ["kind", "friendly", "gracious", "great"]
+    randomAdjective1 = random.choice(randomAdjectives1)
+    randomAdjective2 = random.choice(randomAdjectives2)
+    answer = f"These {randomAdjective1} burgers are for the {randomAdjective2} people of Treasure Island!"
 user_statement = input("Enter the following phrase precisely:\n" + answer + "\n")
 if user_statement == answer:
     print("The burgers are ready and are being served to the people of Treasure Island!")
 else: 
-    print("You dropped the burgers on the ground! Game over")
+    print("Check your spelling! You dropped the burgers on the ground! Game over")
     sys.exit()
 
 #time check
@@ -304,7 +312,7 @@ if time_mode:
 randomHand = random.choice(["right", "left"])
 
 # The Queen gives the key to the treasure!
-print(f"The Queen of Treasure Island thinks you have done a splendid job and tells you to approach the guard for the treasure.\n" +
+print(f"The Queen of Treasure Island thanks you for feeding the people a toothsome meal and she is impressed telling you that you have done a splendid job! Now, she tells you to approach the guard for the treasure.\n" +
     f"One more thing: she says to pick the {randomHand} hand from the Guard when he asks you")
 if hard_mode: 
     print(f"The Queen of Treasure Island has also noted to not forget to mind your manners and say please after your response. No commas needed")
