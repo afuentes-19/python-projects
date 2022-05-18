@@ -99,7 +99,7 @@ while randomNumMonsters > 0:
     user_action = input("Will you 'attack', 'heal', or 'run'? Enter your selection\n")
 
     # makes sure user action is interpreted correctly in the case they inputted uppercase characters
-    user_action.lower()
+    user_action = user_action.lower()
 
     # deduct a turn per selection
     turns -= 1
@@ -319,7 +319,7 @@ if hard_mode:
     randomHand += " please"
 
 user_which_hand = input("You approach the Guard, and he says he has the key in one of his hands. He is asking which hand do you choose? Enter 'right' or 'left'\n")
-user_which_hand.lower()
+user_which_hand = user_which_hand.lower()
 
 if user_which_hand == randomHand:
     if time_mode: 
