@@ -21,7 +21,7 @@ if (n_chars + n_numbers + n_symbols > 50):
     print("Password is too long. Please run the program to try again.")
     sys.exit()
 
-if (n_chars < 0 or n_numbers < 0 or n_symbols < 0)
+if (n_chars < 0 or n_numbers < 0 or n_symbols < 0):
     print("Negative values are not accepted")
     sys.exit()
 
