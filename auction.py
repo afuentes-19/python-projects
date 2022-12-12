@@ -10,11 +10,12 @@ def determineWinner(bidders):
     result = ""
     for name in bidders:
         print(f"Currently looking at {name} with the bid: {bidders[name]}\n")
-        if bidders[name] > highestBid:
-            highestBid = bidders[name]
-            result = f"The winning bid is by {name} who wins today's item, {todaysItem}, for ${bidders[name]}. Congratulations!\n"
+        currentBidAmt = bidders[name]
+        if currentBidAmt > highestBid:
+            highestBid = currentBidAmt
+            result = f"The winning bid is by {name} who wins today's item, {todaysItem}, for ${currentBidAmt}. Congratulations!\n"
         elif bidders[name] == highestBid:
-            result = "There is a tie"
+            result = "There is a tie!"
     return result 
 
 bidders = {}
@@ -25,7 +26,7 @@ print("Hello! Welcome to the Auction Game!")
 while moreBidders: 
     print(f"Today's bid is for this item: {todaysItem}")
     bidderName = input("What is your name?\n")
-    bidderAmt = int(input(f"Welcome to the auction, {bidderName}! How much would you like to bid? (Enter number amount only)\n"))
+    bidderAmt = float(input(f"Welcome to the auction, {bidderName}! How much would you like to bid? (Enter number amount only)\n"))
     nextBidder = input("Is there another bidder? Please enter 'yes' or 'no'.\n")
     addBidder(bidderName, bidderAmt)
     if nextBidder == 'no':
