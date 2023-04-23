@@ -75,8 +75,9 @@ if (hard_mode):
 else: 
     randomNumMonsters = random.randint(16, 22)
 
-print(f"   Now, GET READY TO FIGHT! There are {randomNumMonsters} island MONSTERS ready to fight you.\n" +
-        "   Each turn you can choose to 'attack', 'heal', or 'run'.\n" +
+time.sleep(0.5) 
+print(f"\nNow, GET READY TO FIGHT! There are {randomNumMonsters} island MONSTERS ready to fight you.\n")
+print("Each turn you can choose to 'attack', 'heal', or 'run'.\n" +
         "   Entering 'attack' will defeat at least 1 to at most 6 monsters depending on your health. You lose 2 health each time you attack.\n" +
         "   Entering 'heal' will allow the doctor to heal you with 1 or 2 lives. If you have less than 5 lives, you will get 3 lives. \n (Healing takes 3 seconds if you are in timed mode!)\n" +
         "   Entering 'run' will mean you will rather flight than fight and have to rely on your health, speed, and luck to escape whatever monsters remain!\n" +
@@ -133,36 +134,20 @@ while randomNumMonsters > 0:
 
     # run
     elif user_action == "run": 
-        if randomNumMonsters >= 5 and user_health <= 5:
-            print("You were too low in health and there were too many monsters!\n They caught up to you and they want you to feed them burgers forever. Game over!")
+        # should there be a dynamic function to define the probability where health 
+        # def outrunMonsters(health, monsters):
+            # if monsters > 10:
+                # lose
+            # else: 
+                # formula that determines the win percentage 
+                # based on win percentage, determine if the user escapes or not
+        if randomNumMonsters > 10 and user_health <10:
+            print("Sorry, there are too many monsters and your health is too low! Oops, game over!")
             sys.exit()
-        elif randomNumMonsters >=2 and randomNumMonsters <= 5:
-            randomRunLuck = random.randint(1,3) 
-            print("speed number " + str(randomRunLuck))
-            print("With your chances, you had a 33 percent chance to run away!")
-        elif randomNumMonsters == 1 and user_health < 6:
-            randomRunLuck = random.randint(1,2) + 1
-            print("speed number " + str(randomRunLuck))
-            print("With your chances, you had a 50 percent chance to run away!")
-        elif randomNumMonsters == 1 and user_health >= 6:
-            randomRunLuck = random.randint(1,2) + 1
-            print("speed number " + str(randomRunLuck))
-            if randomRunLuck != 3:
-                randomRunLuck = random.randint(1,2) + 1
-                print("speed number " + str(randomRunLuck))
-                print("With your chances, you had a 75 percent chance to run away!")
-        elif user_health >= 12 and randomNumMonsters <8:
-            randomRunLuck = random.randint(1,5)
-            print("speed number " + randomRunLuck)
-            print("With your chances, you had a 20 percent chance to run away!")
-        else: 
-            randomRunLuck = random.randint(1,25)
-            print("With your chances, you had a 4 percent chance to run away!")
-            #print(randomRunLuck)
- 
-        if randomRunLuck == 3:
-            print("Nice job, you were able to outrun the monsters!")
-            randomNumMonsters = 0; 
+        randomLuck = random.randint(1,3) 
+        print(f"Your speed was {randomLuck}/3")
+        if randomLuck == 3:
+            print("You outran the monsters!")
         else: 
             print("You were too slow to outrun the monsters. You will now feed them their favorite island tacos until they're happy. Game over")
             sys.exit()
@@ -239,7 +224,7 @@ if time_mode:
         print("Time: " + str(time_left))
         sys.exit()
 
-print("PART 2: THE TOPPINGS! (Lettuce, Tomato, Onions, Mayo")
+print("PART 2: THE TOPPINGS! (Lettuce, Tomato, Onions, Mayo)")
 randomTriviaTopic = random.choice(triviaTypes)
 print(f" Now it's time to test your trivia in {randomTriviaTopic}")
 

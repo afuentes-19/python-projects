@@ -1,4 +1,4 @@
-print("Welcome to mad libs")
+print("Welcome to mad libs!")
 noun1 = input("Enter a noun: ")
 adjective1 = input ("Enter an adjective: ")
 verb1 = input("Enter a verb: ")
