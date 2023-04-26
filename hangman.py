@@ -3,6 +3,8 @@ import hangman_words
 from hangman_art import stages
 from hangman_art import logo
 from hangman_words import word_list
+from hangman_words import ridiculous_words
+from hangman_words import places_list
 import os
 
 #update display based on a user's guess
@@ -20,9 +22,29 @@ def update_display():
         print(f"Word to guess: {' '.join(display)}")
         print(stages[lives-1])
 
-#Step 0
+#Step 0: Welcome and Select Mode
 print(logo)
 print("Welcome to Hangman!")
+print("Select Mode")
+wordBank = []
+modes = ["normal", "ridiculous", "names of countries and few other places"]
+for (i, mode) in enumerate(modes, start=1):
+    print(f"({i}) {mode}")
+try:
+    modeType = int(input("Enter the number associated with the mode you would like to play.\n"))
+except Exception as e:
+    print(e)
+while not (1 <= modeType <= 3):
+    print("Invalid mode type")
+    modeType = int(input("Enter the number associated with the mode you would like to play.\n"))
+
+print(f"You selected {modes[modeType-1]} mode!")
+if modeType == 2:
+    wordBank = ridiculous_words
+elif modeType == 3:
+    wordBank = places_list
+else:
+    wordBank = word_list
 
 #Step 1 
 guessedLetters = []
@@ -31,7 +53,7 @@ game_over = False
 lives = len(stages)
 
 #todo1 - Randomly choose a word from the list and assign it to a variable called chosen word
-chosen_word = random.choice(word_list)
+chosen_word = random.choice(wordBank)
 chosen_word_str = chosen_word
 blank = '_'
 display = []
@@ -48,6 +70,8 @@ for character in range(len(chosen_word)):
 while not game_over:
     print(f"Word to guess: {' '.join(display)}")
     print(stages[lives-1])
+    if guessedLetters:
+        print(f"Guessed Letters: {guessedLetters}")
     guess = input("Guess a letter: ")
     while guess in guessedLetters:
         guess = input("Already guessed this letter, please guess again: ")

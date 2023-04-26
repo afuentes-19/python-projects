@@ -2,12 +2,6 @@ import sys
 import random
 import time
 ############### Blackjack Project #####################
-
-#Difficulty Normal 😎: Use all Hints below to complete the project.
-#Difficulty Hard 🤔: Use only Hints 1, 2, 3 to complete the project.
-#Difficulty Extra Hard 😭: Only use Hints 1 & 2 to complete the project.
-#Difficulty Expert 🤯: Only use Hint 1 to complete the project.
-
 ############### Our Blackjack House Rules #####################
 
 ## The deck is unlimited in size. 
@@ -19,24 +13,59 @@ import time
 ## The cards in the list have equal probability of being drawn.
 ## Cards are not removed from the deck as they are drawn.
 ## The computer is the dealer.
+## If the dealer has less than 16, they get to draw again 
 
 ##################### Hints #####################
-#define functions
-def dealCards():
-    hand = []
-    hand.append(random.choice(deck))
-    hand.append(random.choice(deck))
-    return hand 
 
-def extraCard(hand, player):
-    newCard = random.choice(deck)
-    hand.append(newCard)
+###########################################
+##  Define functions ##
+###########################################
+def dealCards(num, player):
+    hand = []
+    hiddenMode = False
     if player == "user":
-        print(f"You got a {newCard}")
-        print(f"Your cards are: {playerCards}")
-    if player == "dealer":
-        print(f"The dealer got a {newCard}")
-        print(f"The dealer's cards are: {dealerCards}")
+        hand = playerCards
+    else:
+        hand = dealerCards
+        if len(hand) < 2:
+            hiddenMode = True
+    for n in range(num):
+        newCardIndex = random.randrange(len(deck))
+        newCard = deck[newCardIndex]
+        # user drew face card (Jack, King, Queen)
+        if newCardIndex >= 10 and player == "user":
+            faceCardIndex = newCardIndex % 10
+            #print(f"Face card index is {faceCardIndex}")
+            newCard = faceCards[faceCardIndex]
+            print(f"You got a {newCard}")
+            print(f"Your {newCard} has a value of 10, so a 10 has been added to your hand")
+            newCard = 10
+        elif newCardIndex == 0 and player == "user":
+            valueNotPicked = True
+            newCard = faceCards[0]
+            print("You got an Ace!")
+            while valueNotPicked:
+                aceValue = int(input("An Ace can either have a value of 1 or 11. Enter the value you would like your ace to have: '1' or '11'\n"))
+                if aceValue == 1 or aceValue == 11:
+                    print(f"Thanks for selecting a value. Your Ace is now {aceValue}")
+                    valueNotPicked = False
+                else: 
+                    print("Sorry, that's not a valid value for an Ace")
+            newCard = aceValue
+        # dealer logic if dealer draws an Ace
+        elif newCardIndex == 0 and player == "dealer":
+            if calculateScore(dealerCards) + newCard > 21:
+                newCard = 1
+            if not hiddenMode:
+                print("The dealer got an ace!")
+                print(f"The value of the ace will be {newCard}")
+        else:
+            if player == "user":
+                print(f"You got a {newCard}")
+            if player == "dealer" and not hiddenMode:
+                print(f"The dealer got a {newCard}")
+        hand.append(newCard)
+    return hand
 
 def calculateScore(hand):
     score = 0
@@ -45,27 +74,126 @@ def calculateScore(hand):
     return score
 
 def determineWinner(playerHand, dealerHand):
+    print("Time to determine who won!")
+    time.sleep(1)
     playerScore = calculateScore(playerHand)
     dealerScore = calculateScore(dealerHand)
     while dealerScore < 16 and dealerScore <= 21:
         print("The dealer has less than 16, so they will draw another card.")
-        extraCard(dealerCards, "dealer")
+        time.sleep(1)
+        dealerHand = dealCards(1, "dealer")
+        print(f"The dealer's hand is now: {dealerHand}")
         dealerScore = calculateScore(dealerHand)
+    for x in range(3): # three dots
+        string = "Calculating results" + "." * x
+        print("\033[K", string, end="\r") # clear the line, print string and go back to the start
+        time.sleep(0.5)
+    print()
     print(f"You score is {playerScore}")
+    time.sleep(1)
     print(f"The dealer's score is {dealerScore}")
+    time.sleep(1)
+    # user wins 
     if playerScore > dealerScore or dealerScore > 21: 
-        print("Congratulations, you win booboo <333 Mwahh!")
+        print("Congratulations, you win!")
+        if gameWithLives:
+            time.sleep(2)
+            addWin()
+            time.sleep(3)
+        else:
+            time.sleep(2)
+    # tie game
     elif playerScore == dealerScore:
         print("Tie game!")
+        if gameWithLives:
+            time.sleep(2)
+            printPlayerStats()
+            print("3 seconds before next game begins...")
+            time.sleep(3)
+        else:
+            time.sleep(2)
+    # dealer wins
     else:
-        print("The dealer had a higher score than you, game over!")
+        print("The dealer had a higher score than you. The dealer wins!")
+        if gameWithLives:
+            time.sleep(2)
+            loseLife()
+            time.sleep(3)
+        else:
+            time.sleep(2)
 
-#initial variables
+def loseLife():
+    global lives
+    global wins
+    lives -= 1
+    print(f"You lose a life!")
+    printPlayerStats()
+    if lives > 0:
+        print("3 seconds before next game begins...")
+
+def addWin():
+    global lives
+    global wins
+    global badge
+    wins += 1
+    if wins == 3:
+        badge = "Pro"
+        print(f"Congrats, you get the {badge} player badge!")
+        time.sleep(2)
+    if wins == 5:
+        badge = "Elite"
+        print(f"Congrats, you get the {badge} player badge!")
+        time.sleep(2)
+    if wins == 10:
+        badge = "Legendary"
+        print(f"Amazing!! Congrats, you get the {badge} player badge!!")
+        addLife()
+        print("Take a moment to celebrate and strategize for the Hall of Fame, All-Star badge! (20 wins)")
+        time.sleep(5)
+    if wins == 20:
+        badge = "HALL OF FAME ALL-STAR"
+        print(f"Are you serious?!? You earned the {badge} badge!!")
+        print("Take a pause to celebrate!! You hacked the game!!")
+        # play music
+        time.sleep(10)
+    printPlayerStats()
+    print("3 seconds before next game begins...")
+
+def addLife():
+    global lives
+    lives += 1
+    time.sleep(1)
+    print("Surprise! You earned an extra life!!")
+    time.sleep(1)
+
+def printPlayerStats():
+    print("***********************")
+    print(f"Lives remaining: {lives}")
+    print(f"Wins: {wins}")
+    if badge:
+        print(f"Earned Badge: {badge}")
+    print("***********************")
+
+# def changeAce(player, hand):
+#     print("Your total score is over 21, but you have an ace!")
+#     userAnswer = input("Would you like to change the value of your ace? Enter 'y' for yes")
+#     if userAnswer == 'y':
+
+
+###########################################
+##  Define variables ##
+###########################################
 playerCards = []
 dealerCards = []
+faceCards = ["Jack", "Queen", "King", "Ace"]
 keepHitting = False
-gameOver = False
 deck = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
+gameOver = False
+lives = 3
+firstGame = True
+wins = 0
+gameWithLives = False
+badge = ""
 art = """
 .------.            _     _            _    _            _    
 |A_  _ |.          | |   | |          | |  (_)          | |   
@@ -76,73 +204,102 @@ art = """
       |  \/ K|                            _/ |                
       `------'                           |__/           
 """
+
+###########################################
+##  START OF GAME ##
+###########################################
+
 toPlay = input("Would you like to play a game of Blackjack? Enter 'y' for yes or 'n' for no.\n")
-if toPlay.lower() == 'y':
+while toPlay.lower() == 'y':
+    # reset game 
+    playerCards = []
+    dealerCards = []
+    keepHitting = False
+    gameOver = False
+    # start game
     print(art)
     print("Welcome to Blackjack!")
-else:
-    print("Goodbye!")
-    sys.exit()
-print("The dealer deals two cards to you...")
-time.sleep(1)
-playerCards = dealCards()
-print(f"Your two cards are: {playerCards}")
-print(f"The dealer deals two cards to himself...") 
-time.sleep(1)
-dealerCards = dealCards()
-print(f"The dealer has 2 cards: [{dealerCards[0]},X]")
-if calculateScore(playerCards) == 21:
-    print("Congrats you won!")
-    sys.exit()
-else:
-    hitAnswer = input("Would you like another card? Enter 'y' for yes or 'n' for no\n")
-    if hitAnswer == 'y':
-        keepHitting = True
-while keepHitting:
-    extraCard(playerCards, "user")
-    if calculateScore(playerCards) > 21:
-        print("Bust! You lose.")
+    ## ask the user in their first game, if they would like to play in Lives Mode
+    if firstGame == True:
+        print("Do you want to play with lives mode? (You get 3 lives).")
+        livesModeAnswer = input("Enter 'y' for Lives Mode or press any other key for regular, unlimited mode.\n")
+        if livesModeAnswer == 'y':
+            print("You are now playing with Lives Mode!")
+            print("You get 3 lives. Each time the dealer wins, you lose a life")
+            print("Let's see how many times you can win, good luck!") 
+            time.sleep(3)
+            gameWithLives = True
+    firstGame = False
+    print("***********************\nGAME BEGINS!\n***********************")
+    print("The dealer deals two cards to you...")
+    time.sleep(1)
+    # deals cards
+    playerCards = dealCards(2, "user")
+    print(f"Your two cards are: {playerCards}")
+    print(f"The dealer deals two cards to himself...") 
+    time.sleep(1)
+    dealerCards = dealCards(2, "dealer")
+    print(f"The dealer has two cards: [{dealerCards[0]},X]")
+    # determine if user automatically wins
+    if calculateScore(playerCards) == 21:
+        print("Congrats you got 21 and won!")
+        time.sleep(2)
+        gameOver = True
+        # lives mode: add win 
+        if gameWithLives:
+            addWin()
+            time.sleep(3)
+    # ask if the user would like another card 
+    else:
+        hitAnswer = input("Would you like another card? Enter 'y' for yes or 'n' for no\n")
+        if hitAnswer == 'y':
+            keepHitting = True
+    # keep asking as long as they want another card and they game is not over
+    while keepHitting and not gameOver:
+        playerCards = dealCards(1, "user")
+        print(f"Here are your cards: {playerCards}")
+        time.sleep(1)
+        playerScore = calculateScore(playerCards)
+        print(f"Your score is {playerScore}")
+        if playerScore > 21:
+            # need extra logic if the player has an ace
+            print("Bust! Your score is over 21. You lose.")
+            gameOver = True
+            time.sleep(2)
+            # lose a life if Lives Mode is ON
+            if gameWithLives:
+                loseLife()
+                time.sleep(3)
+        if playerScore == 21:
+            print("Congrats, you got 21! You win!")
+            gameOver = True
+            time.sleep(2)
+            # add a win and life if Lives Mode is ON
+            if gameWithLives:
+                addLife()
+                addWin()
+                time.sleep(3)
+        if not gameOver:
+            # ask the user if they would like to change the value of their ace if they have one
+
+            # ask the user if they would like anothe card
+            hitAnswer = input("Would you like another card? Enter 'y' for yes or 'n' for no\n")
+            if hitAnswer == 'n':
+                keepHitting = False
+    # determine winner
+    if not gameOver:
+        determineWinner(playerCards, dealerCards)
+    # logic for lives mode 
+    if gameWithLives and lives > 0:
+        toPlay = 'y'
+    elif gameWithLives and lives == 0:
+        print("Uh oh! You ran out lives.")
+        print(f"Your total wins: {wins}")
+        if badge:
+            print(f"Congrats! Your earned badge is {badge}")
+        print("Thanks for playing, goodbye!")
         sys.exit()
-    hitAnswer = input("Would you like another card? Enter 'y' for yes or 'n' for no\n")
-    if hitAnswer == 'n':
-        keepHitting = False
-determineWinner(playerCards, dealerCards)
-#Hint 1: Go to this website and try out the Blackjack game: 
-#   https://games.washingtonpost.com/games/blackjack/
-#Then try out the completed Blackjack project here: 
-#   http://blackjack-final.appbrewery.repl.run
-
-#Hint 2: Read this breakdown of program requirements: 
-#   http://listmoz.com/view/6h34DJpvJBFVRlZfJvxF
-#Then try to create your own flowchart for the program.
-
-#Hint 3: Download and read this flow chart I've created: 
-#   https://drive.google.com/uc?export=download&id=1rDkiHCrhaf9eX7u7yjM1qwSuyEk-rPnt
-
-#Hint 4: Create a deal_card() function that uses the List below to *return* a random card.
-#11 is the Ace.
-#cards = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
-
-#Hint 5: Deal the user and computer 2 cards each using deal_card() and append().
-#user_cards = []
-#computer_cards = []
-
-#Hint 6: Create a function called calculate_score() that takes a List of cards as input 
-#and returns the score. 
-#Look up the sum() function to help you do this.
-
-#Hint 7: Inside calculate_score() check for a blackjack (a hand with only 2 cards: ace + 10) and return 0 instead of the actual score. 0 will represent a blackjack in our game.
-
-#Hint 8: Inside calculate_score() check for an 11 (ace). If the score is already over 21, remove the 11 and replace it with a 1. You might need to look up append() and remove().
-
-#Hint 9: Call calculate_score(). If the computer or the user has a blackjack (0) or if the user's score is over 21, then the game ends.
-
-#Hint 10: If the game has not ended, ask the user if they want to draw another card. If yes, then use the deal_card() function to add another card to the user_cards List. If no, then the game has ended.
-
-#Hint 11: The score will need to be rechecked with every new card drawn and the checks in Hint 9 need to be repeated until the game ends.
-
-#Hint 12: Once the user is done, it's time to let the computer play. The computer should keep drawing cards as long as it has a score less than 17.
-
-#Hint 13: Create a function called compare() and pass in the user_score and computer_score. If the computer and user both have the same score, then it's a draw. If the computer has a blackjack (0), then the user loses. If the user has a blackjack (0), then the user wins. If the user_score is over 21, then the user loses. If the computer_score is over 21, then the computer loses. If none of the above, then the player with the highest score wins.
-
-#Hint 14: Ask the user if they want to restart the game. If they answer yes, clear the console and start a new game of blackjack and show the logo from art.py.
+    # ask if the users would like to keep playing
+    else:
+        toPlay = input("Would you like to play another game of Blackjack? Enter 'y' for yes or 'n' for no.\n")
+print("Thanks for playing, see you again next time!")
