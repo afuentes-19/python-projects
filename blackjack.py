@@ -21,6 +21,7 @@ import time
 ##  Define functions ##
 ###########################################
 def dealCards(num, player):
+    """Deals cards and returns the player's cards with the added cards"""
     hand = []
     hiddenMode = False
     if player == "user":
@@ -154,7 +155,7 @@ def addWin():
         badge = "HALL OF FAME ALL-STAR"
         print(f"Are you serious?!? You earned the {badge} badge!!")
         print("Take a pause to celebrate!! You hacked the game!!")
-        # play music
+        # TO ADD: play music
         time.sleep(10)
     printPlayerStats()
     print("3 seconds before next game begins...")
@@ -173,12 +174,6 @@ def printPlayerStats():
     if badge:
         print(f"Earned Badge: {badge}")
     print("***********************")
-
-# def changeAce(player, hand):
-#     print("Your total score is over 21, but you have an ace!")
-#     userAnswer = input("Would you like to change the value of your ace? Enter 'y' for yes")
-#     if userAnswer == 'y':
-
 
 ###########################################
 ##  Define variables ##
